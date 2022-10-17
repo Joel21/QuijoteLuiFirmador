@@ -29,10 +29,10 @@ public class Main {
         PKCS12_RESOURCE = PKCS12_RESOURCE + File.separatorChar + nombreP12;
         System.out.println("Archivo Firma P12: " + PKCS12_RESOURCE);
         
-        PKCS12_PASSWORD = new String("clave_certificado");
+        PKCS12_PASSWORD = "clave_certificado";
 
         /*
-        Para firmar con un certificado emitido por le BCE
+        Para firmar con un certificado emitido por el BCE
          */
         xadesBesFirma.sign(archivo,
                 urlOutArchivo,
@@ -41,7 +41,7 @@ public class Main {
                 TokensAvailables.BCE_IKEY2032);
 
         /*
-        Para firmar con un certificado emitido por le Security Data
+        Para firmar con un certificado emitido por Security Data
          */
         xadesBesFirma.sign(archivo,
                 urlOutArchivo,
@@ -57,5 +57,41 @@ public class Main {
                 PKCS12_RESOURCE,
                 PKCS12_PASSWORD,
                 TokensAvailables.KEY4_CONSEJO_JUDICATURA);
+
+        /*
+        Para firmar con un certificado emitido por Uanataca Ecuador S.A.
+        */
+        xadesBesFirma.sign(archivo,
+                urlOutArchivo,
+                PKCS12_RESOURCE,
+                PKCS12_PASSWORD,
+                TokensAvailables.TOKENME_UANATACA);
+
+        /*
+        Para firmar con un certificado emitido por Eclipsoft
+        */
+        xadesBesFirma.sign(archivo,
+                urlOutArchivo,
+                PKCS12_RESOURCE,
+                PKCS12_PASSWORD,
+                TokensAvailables.Eclipsoft);
+
+        /*
+        Para firmar con un certificado emitido por Datilmedia S.A.
+        */
+        xadesBesFirma.sign(archivo,
+                urlOutArchivo,
+                PKCS12_RESOURCE,
+                PKCS12_PASSWORD,
+                TokensAvailables.DATILMEDIA);
+
+        /*
+        Para firmar con un certificado emitido por ANFAC Autoridad de Certificación Ecuador C.A.
+        */
+        xadesBesFirma.sign(archivo,
+                urlOutArchivo,
+                PKCS12_RESOURCE,
+                PKCS12_PASSWORD,
+                TokensAvailables.ANF1);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 
+ * Copyright (C) 2014
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,7 @@ import es.mityc.firmaJava.libreria.xades.FirmaXML;
 import es.mityc.javasign.pkstore.CertStoreException;
 import es.mityc.javasign.pkstore.IPKStoreManager;
 import es.mityc.javasign.pkstore.keystore.KSStore;
+
 import java.io.FileInputStream;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateExpiredException;
@@ -59,14 +60,13 @@ import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 
 /**
- *
  * @author jorjoluiso
  */
 /* <p>
  * Clase base que deberían extender los diferentes ejemplos para realizar firmas
  * XML.
  * </p>
- * 
+ *
  */
 public abstract class GenericXMLSignature {
 
@@ -156,13 +156,13 @@ public abstract class GenericXMLSignature {
             Provider provider = storeManager.getProvider(certificate);
 
             /*
-            * Creación del objeto que contiene tanto los datos a firmar como la
-            * configuración del tipo de firma
+             * Creación del objeto que contiene tanto los datos a firmar como la
+             * configuración del tipo de firma
              */
             DataToSign dataToSign = createDataToSign();
 
             /*
-            * Creación del objeto encargado de realizar la firma
+             * Creación del objeto encargado de realizar la firma
              */
             FirmaXML firma = new FirmaXML();
 
@@ -353,116 +353,89 @@ public abstract class GenericXMLSignature {
         return certificate;
     }
 
-    public static String selectCertificate(KeyStore keyStore, TokensAvailables tokenSelected) throws KeyStoreException {
-        String aliasSeleccion = null;
-        X509Certificate certificado = null;
-        Enumeration<String> nombres = keyStore.aliases();
-        while (nombres.hasMoreElements()) {
-            String aliasKey = nombres.nextElement();
-            certificado = (X509Certificate) keyStore.getCertificate(aliasKey);
+    public static String selectCertificate(KeyStore keyStore, TokensAvailables tokenSelected) throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateExpiredException, CertificateNotYetValidException, CertificateException {
+        String aliasSelection = null;
+        X509Certificate certificated;
+        Enumeration<String> names = keyStore.aliases();
 
-            X500NameGeneral x500emisor = new X500NameGeneral(certificado.getIssuerDN().getName());
-            X500NameGeneral x500sujeto = new X500NameGeneral(certificado.getSubjectDN().getName());
-
-            String cn = x500emisor.getCN();
-            String a = AutoridadesCertificantes.SECURITY_DATA.getCn();
-
-            Boolean r = cn.contains(a);
-
-            if ((tokenSelected.equals(TokensAvailables.SD_BIOPASS)
-                    || tokenSelected.equals(TokensAvailables.SD_EPASS3000))
-                    && (x500emisor.getCN().contains(AutoridadesCertificantes.SECURITY_DATA.getCn())
-                    || x500emisor.getCN().contains(AutoridadesCertificantes.SECURITY_DATA_SUB_1.getCn())
-                    || x500emisor.getCN().contains(AutoridadesCertificantes.SECURITY_DATA_SUB_2.getCn()))) {
-                if (AutoridadesCertificantes.SECURITY_DATA.getO().equals(x500emisor.getO())
-                        && AutoridadesCertificantes.SECURITY_DATA.getC().equals(x500emisor.getC())
-                        && AutoridadesCertificantes.SECURITY_DATA.getO().equals(x500sujeto.getO())
-                        && AutoridadesCertificantes.SECURITY_DATA.getC().equals(x500sujeto.getC())) {
-                    if (certificado.getKeyUsage()[0]) {
-                        aliasSeleccion = aliasKey;
+        while (names.hasMoreElements()) {
+            String aliasKey = names.nextElement();
+            certificated = (X509Certificate) keyStore.getCertificate(aliasKey);
+            X500NameGeneral x500Emitter = new X500NameGeneral(certificated.getIssuerDN().getName());
+            X500NameGeneral x500Subject = new X500NameGeneral(certificated.getSubjectDN().getName());
+            if ((tokenSelected.equals(TokensAvailables.SD_BIOPASS) || tokenSelected.equals(TokensAvailables.SD_EPASS3000)) && (x500Emitter.getCN().contains(AutoridadesCertificantes.SECURITY_DATA.getCn()) || x500Emitter.getCN().contains(AutoridadesCertificantes.SECURITY_DATA_SUB_1.getCn()) || x500Emitter.getCN().contains(AutoridadesCertificantes.SECURITY_DATA_SUB_2.getCn()))) {
+                if (AutoridadesCertificantes.SECURITY_DATA.getO().equals(x500Emitter.getO()) && AutoridadesCertificantes.SECURITY_DATA.getC().equals(x500Emitter.getC()) && AutoridadesCertificantes.SECURITY_DATA.getO().equals(x500Subject.getO()) && AutoridadesCertificantes.SECURITY_DATA.getC().equals(x500Subject.getC()))
+                    if (certificated.getKeyUsage()[0]) {
+                        aliasSelection = aliasKey;
                         break;
                     }
-                }
-                if (AutoridadesCertificantes.SECURITY_DATA_SUB_1.getO().equals(x500emisor.getO())
-                        && AutoridadesCertificantes.SECURITY_DATA_SUB_1.getC().equals(x500emisor.getC())
-                        && AutoridadesCertificantes.SECURITY_DATA_SUB_1.getO().equals(x500sujeto.getO())
-                        && AutoridadesCertificantes.SECURITY_DATA_SUB_1.getC().equals(x500sujeto.getC())) {
-                    if (certificado.getKeyUsage()[0]) {
-                        aliasSeleccion = aliasKey;
+                if (AutoridadesCertificantes.SECURITY_DATA_SUB_1.getO().equals(x500Emitter.getO()) && AutoridadesCertificantes.SECURITY_DATA_SUB_1.getC().equals(x500Emitter.getC()) && AutoridadesCertificantes.SECURITY_DATA_SUB_1.getO().equals(x500Subject.getO()) && AutoridadesCertificantes.SECURITY_DATA_SUB_1.getC().equals(x500Subject.getC()))
+                    if (certificated.getKeyUsage()[0]) {
+                        aliasSelection = aliasKey;
                         break;
                     }
-                }
-                if (AutoridadesCertificantes.SECURITY_DATA_SUB_2.getO().equals(x500emisor.getO()) 
-                        && AutoridadesCertificantes.SECURITY_DATA_SUB_2.getC().equals(x500emisor.getC()) 
-                        && AutoridadesCertificantes.SECURITY_DATA_SUB_2.getO().equals(x500sujeto.getO()) 
-                        && AutoridadesCertificantes.SECURITY_DATA_SUB_2.getC().equals(x500sujeto.getC())) {
-                    if (certificado.getKeyUsage()[0]) {
-                        aliasSeleccion = aliasKey;
+                if (AutoridadesCertificantes.SECURITY_DATA_SUB_2.getO().equals(x500Emitter.getO()) && AutoridadesCertificantes.SECURITY_DATA_SUB_2.getC().equals(x500Emitter.getC()) && AutoridadesCertificantes.SECURITY_DATA_SUB_2.getO().equals(x500Subject.getO()) && AutoridadesCertificantes.SECURITY_DATA_SUB_2.getC().equals(x500Subject.getC()))
+                    if (certificated.getKeyUsage()[0]) {
+                        aliasSelection = aliasKey;
                         break;
                     }
-                }
                 continue;
             }
-            if (tokenSelected.equals(TokensAvailables.BCE_ALADDIN)
-                    || (tokenSelected.equals(TokensAvailables.BCE_IKEY2032)
-                    && x500emisor.getCN().contains(AutoridadesCertificantes.BANCO_CENTRAL.getCn()))) {
-
-                if (x500emisor.getO().contains(AutoridadesCertificantes.BANCO_CENTRAL.getO())
-                        && AutoridadesCertificantes.BANCO_CENTRAL.getC().equals(x500emisor.getC())
-                        && x500sujeto.getO().contains(AutoridadesCertificantes.BANCO_CENTRAL.getO())
-                        && AutoridadesCertificantes.BANCO_CENTRAL.getC().equals(x500sujeto.getC())) {
-
-                    if (certificado.getKeyUsage()[0] || certificado.getKeyUsage()[1]) {
-                        aliasSeleccion = aliasKey;
+            if (tokenSelected.equals(TokensAvailables.BCE_ALADDIN) || (tokenSelected.equals(TokensAvailables.BCE_IKEY2032) && x500Emitter.getCN().contains(AutoridadesCertificantes.BANCO_CENTRAL.getCn()))) {
+                if (x500Emitter.getO().contains(AutoridadesCertificantes.BANCO_CENTRAL.getO()) && AutoridadesCertificantes.BANCO_CENTRAL.getC().equals(x500Emitter.getC()) && x500Subject.getO().contains(AutoridadesCertificantes.BANCO_CENTRAL.getO()) && AutoridadesCertificantes.BANCO_CENTRAL.getC().equals(x500Subject.getC()))
+                    if (certificated.getKeyUsage()[0]) {
+                        aliasSelection = aliasKey;
                         break;
                     }
-                }
                 continue;
             }
-            if (tokenSelected.equals(TokensAvailables.ANF1)
-                    && x500emisor.getCN().contains(AutoridadesCertificantes.ANF.getCn())) {
-
-                if (AutoridadesCertificantes.ANF.getO().equals(x500emisor.getO())
-                        && AutoridadesCertificantes.ANF.getC().equals(x500emisor.getC())
-                        && AutoridadesCertificantes.ANF.getC().toLowerCase().equals(x500sujeto.getC())) {
-
-                    if (certificado.getKeyUsage()[0] || certificado.getKeyUsage()[1]) {
-                        aliasSeleccion = aliasKey;
+            if (tokenSelected.equals(TokensAvailables.ANF1) && x500Emitter.getCN().contains(AutoridadesCertificantes.ANF.getCn())) {
+                if (AutoridadesCertificantes.ANF.getO().equals(x500Emitter.getO()) && AutoridadesCertificantes.ANF.getC().equals(x500Emitter.getC()) && AutoridadesCertificantes.ANF.getC().equals(x500Subject.getC()))
+                    if (certificated.getKeyUsage()[0]) {
+                        aliasSelection = aliasKey;
                         break;
                     }
-                }
                 continue;
             }
-            if (tokenSelected.equals(TokensAvailables.ANF1)
-                    && x500emisor.getCN().contains(AutoridadesCertificantes.ANF_ECUADOR_CA1.getCn())) {
-
-                if (AutoridadesCertificantes.ANF_ECUADOR_CA1.getO().equals(x500emisor.getO())
-                        && AutoridadesCertificantes.ANF_ECUADOR_CA1.getC().equals(x500emisor.getC())
-                        && AutoridadesCertificantes.ANF_ECUADOR_CA1.getC().equals(x500sujeto.getC())) {
-
-                    if (certificado.getKeyUsage()[0] || certificado.getKeyUsage()[1]) {
-                        aliasSeleccion = aliasKey;
+            if (tokenSelected.equals(TokensAvailables.ANF1) && x500Emitter.getCN().contains(AutoridadesCertificantes.ANF_ECUADOR_CA1.getCn())) {
+                if (AutoridadesCertificantes.ANF_ECUADOR_CA1.getO().equals(x500Emitter.getO()) && AutoridadesCertificantes.ANF_ECUADOR_CA1.getC().equals(x500Emitter.getC()) && AutoridadesCertificantes.ANF_ECUADOR_CA1.getC().equals(x500Subject.getC()))
+                    if (certificated.getKeyUsage()[0]) {
+                        aliasSelection = aliasKey;
                         break;
                     }
-                }
                 continue;
             }
-            if (tokenSelected.equals(TokensAvailables.KEY4_CONSEJO_JUDICATURA)
-                    && x500emisor.getCN().contains(AutoridadesCertificantes.CONSEJO_JUDICATURA.getCn())) {
-
-                if (x500emisor.getO().contains(AutoridadesCertificantes.CONSEJO_JUDICATURA.getO())
-                        && AutoridadesCertificantes.CONSEJO_JUDICATURA.getC().equals(x500emisor.getC())
-                        && AutoridadesCertificantes.CONSEJO_JUDICATURA.getC().equals(x500sujeto.getC())) {
-
-                    if (certificado.getKeyUsage()[0] || certificado.getKeyUsage()[1]) {
-                        aliasSeleccion = aliasKey;
-
+            if (tokenSelected.equals(TokensAvailables.KEY4_CONSEJO_JUDICATURA) && x500Emitter.getCN().contains(AutoridadesCertificantes.CONSEJO_JUDICATURA.getCn())) {
+                if (x500Emitter.getO().contains(AutoridadesCertificantes.CONSEJO_JUDICATURA.getO()) && AutoridadesCertificantes.CONSEJO_JUDICATURA.getC().equals(x500Emitter.getC()) && AutoridadesCertificantes.CONSEJO_JUDICATURA.getC().equals(x500Subject.getC()))
+                    if (certificated.getKeyUsage()[0]) {
+                        aliasSelection = aliasKey;
                         break;
                     }
-                }
+                continue;
             }
+            if (tokenSelected.equals(TokensAvailables.TOKENME_UANATACA) && x500Emitter.getCN().contains(AutoridadesCertificantes.UANATACA.getCn())) {
+                if (x500Emitter.getO().contains(AutoridadesCertificantes.UANATACA.getO()) && AutoridadesCertificantes.UANATACA.getC().equals(x500Emitter.getC()))
+                    if (certificated.getKeyUsage()[0]) {
+                        aliasSelection = aliasKey;
+                        break;
+                    }
+                continue;
+            }
+            if (tokenSelected.equals(TokensAvailables.Eclipsoft) && x500Emitter.getCN().contains(AutoridadesCertificantes.ECLIPSOFT.getCn())) {
+                if (x500Emitter.getO().contains(AutoridadesCertificantes.ECLIPSOFT.getO()) && AutoridadesCertificantes.ECLIPSOFT.getC().equals(x500Emitter.getC()))
+                    if (certificated.getKeyUsage()[0]) {
+                        aliasSelection = aliasKey;
+                        break;
+                    }
+                continue;
+            }
+            if (tokenSelected.equals(TokensAvailables.DATILMEDIA) && x500Emitter.getCN().contains(AutoridadesCertificantes.DATILMEDIA.getCn()))
+                if (AutoridadesCertificantes.DATILMEDIA.getO().equals(x500Emitter.getO()) && AutoridadesCertificantes.DATILMEDIA.getC().equals(x500Emitter.getC()) && AutoridadesCertificantes.DATILMEDIA.getC().equals(x500Subject.getC()))
+                    if (certificated.getKeyUsage()[0]) {
+                        aliasSelection = aliasKey;
+                        break;
+                    }
         }
-        return aliasSeleccion;
+        return aliasSelection;
     }
-
 }

@@ -7,8 +7,10 @@ public enum TokensAvailables {
     BCE_ALADDIN("BCE - Aladdin eToken Pro"),
     SD_EPASS3000("SD - ePass3003 auto"),
     SD_BIOPASS("SD - BioPass3000"),
-    KEY4_CONSEJO_JUDICATURA("KEY4 - Consejo Judicatura");
-
+    KEY4_CONSEJO_JUDICATURA("KEY4 - Consejo Judicatura"),
+    TOKENME_UANATACA("UANATACA"),
+    Eclipsoft("Eclipsoft"),
+    DATILMEDIA("DATILMEDIA");
     String id;
 
     TokensAvailables(String modelo) {
