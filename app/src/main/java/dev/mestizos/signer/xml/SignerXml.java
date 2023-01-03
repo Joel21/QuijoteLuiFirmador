@@ -1,4 +1,4 @@
-package dev.mestizos.signer;
+package dev.mestizos.signer.xml;
 
 import org.apache.xml.security.keys.keyresolver.KeyResolverException;
 import org.w3c.dom.Document;

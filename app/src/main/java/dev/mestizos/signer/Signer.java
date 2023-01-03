@@ -1,5 +1,6 @@
 package dev.mestizos.signer;
 
+import dev.mestizos.signer.xml.SignerXml;
 import org.w3c.dom.Document;
 
 import javax.xml.transform.Transformer;

@@ -1,4 +1,4 @@
-package dev.mestizos.signer;
+package dev.mestizos.signer.xml;
 
 import org.w3c.dom.Document;
 

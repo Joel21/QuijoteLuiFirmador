@@ -1,7 +1,7 @@
 package dev.mestizos.signer.provider;
 
-import dev.mestizos.signer.DefinitionSignedObject;
-import dev.mestizos.signer.ResourcesForSign;
+import dev.mestizos.signer.xml.DefinitionSignedObject;
+import dev.mestizos.signer.xml.ResourcesForSign;
 import org.w3c.dom.Element;
 import xades4j.XAdES4jException;
 import xades4j.production.SignedDataObjects;

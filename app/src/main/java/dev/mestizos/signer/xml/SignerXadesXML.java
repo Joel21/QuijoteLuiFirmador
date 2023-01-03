@@ -1,4 +1,4 @@
-package dev.mestizos.signer;
+package dev.mestizos.signer.xml;
 
 import dev.mestizos.signer.provider.KeyStoreManager;
 import org.apache.xml.security.keys.KeyInfo;
