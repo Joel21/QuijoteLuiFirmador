@@ -16,7 +16,7 @@ import java.security.KeyStoreException;
 public class SignerXml {
 
     public Document sign(byte[] certificate, String password, byte[] archivoXML) {
-        SignerXadesXML signerXadesXML = new SignerXadesXML();
+        SignerXAdESXml signerXAdESXml = new SignerXAdESXml();
         ResourcesForSign resourcesForSign = new ResourcesForSign();
 
         InputStream xmlInputStream = new ByteArrayInputStream(archivoXML);
@@ -27,7 +27,7 @@ public class SignerXml {
         resourcesForSign.setIdToSign("id");
 
         try {
-            return signerXadesXML.sign(resourcesForSign);
+            return signerXAdESXml.sign(resourcesForSign);
         } catch (KeyStoreException | XAdES4jException | KeyResolverException e) {
             throw new RuntimeException(e);
         }

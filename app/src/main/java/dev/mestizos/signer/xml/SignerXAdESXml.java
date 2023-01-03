@@ -12,7 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.security.KeyStoreException;
 import java.security.cert.X509Certificate;
 
-public class SignerXadesXML {
+public class SignerXAdESXml {
 
     public Document sign(ResourcesForSign resourcesForSign) throws KeyStoreException, XAdES4jException, KeyResolverException {
         ByteArrayInputStream certificateInputStream = new ByteArrayInputStream(resourcesForSign.getCertificate());
