@@ -15,6 +15,11 @@ public class CertificateLocalProvider implements KeyStoreKeyingDataProvider.Sign
     public X509Certificate selectCertificate(List<X509Certificate> availableCertificates) {
         if (availableCertificates != null)
             for (X509Certificate x509Certificate : availableCertificates) {
+                var keyUsage = x509Certificate.getKeyUsage();
+                if (keyUsage == null) {
+                    System.out.println("No es un certificado emitido por una entidad certificadora");
+                    return x509Certificate;
+                }
                 if (x509Certificate.getKeyUsage()[0])
                     return x509Certificate;
             }

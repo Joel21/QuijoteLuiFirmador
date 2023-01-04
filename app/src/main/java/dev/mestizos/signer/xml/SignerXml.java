@@ -16,8 +16,8 @@ import java.security.KeyStoreException;
 public class SignerXml {
 
     public Document sign(byte[] certificate, String password, byte[] archivoXML) {
-        SignerXAdESXml signerXAdESXml = new SignerXAdESXml();
-        ResourcesForSign resourcesForSign = new ResourcesForSign();
+        var signerXAdESXml = new SignerXAdESXml();
+        var resourcesForSign = new ResourcesForSign();
 
         InputStream xmlInputStream = new ByteArrayInputStream(archivoXML);
 
@@ -35,7 +35,7 @@ public class SignerXml {
 
     Document parseXmlDocument(InputStream inputStream) {
 
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        var dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
         DocumentBuilder db;
         try {

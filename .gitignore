@@ -3,8 +3,8 @@
 
 # Ignore Gradle build output directory
 build
-/app/src/main/java/dev/mestizos/signer/Main.java
 .classpath
 .DS_Store
 .idea/
 /gradle/wrapper/gradle-wrapper.jar
+/app/src/main/resources/jorge_luis.p12

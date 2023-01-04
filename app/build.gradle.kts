@@ -13,4 +13,6 @@ dependencies {
 
 application {
     mainClass.set("dev.mestizos.signer.Main")
+
 }
+

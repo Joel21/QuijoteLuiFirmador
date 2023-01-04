@@ -18,7 +18,7 @@ public class Signer {
     void sign(String pathDigitalCertificate,
               String password,
               String pathXmlFile,
-              String pathXmlFileSigned) throws IOException {
+              String pathOutPutXmlFileSigned) throws IOException {
 
         var signerXml = new SignerXml();
 
@@ -26,18 +26,18 @@ public class Signer {
         byte[] xmlFile = Files.readAllBytes(Paths.get(pathXmlFile));
 
         Document documentSigned = signerXml.sign(certificate, password, xmlFile);
-        saveSignedDocument(documentSigned, pathXmlFileSigned);
+        saveSignedDocument(documentSigned, pathOutPutXmlFileSigned);
     }
 
     void saveSignedDocument(Document document, String path) {
         try {
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            var transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
 
-            DOMSource source = new DOMSource(document);
+            var source = new DOMSource(document);
 
-            FileWriter writer = new FileWriter(path);
-            StreamResult result = new StreamResult(writer);
+            var writer = new FileWriter(path);
+            var result = new StreamResult(writer);
 
             transformer.setOutputProperty("encoding", "UTF-8");
             transformer.transform(source, result);
