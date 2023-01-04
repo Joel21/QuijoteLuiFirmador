@@ -11,7 +11,6 @@ credit notes, remission guides and purchase liquidation for Ecuador country
 ## Software
 * Java 17
 * Gradle 7.4
-* 
 
 ## Warning
 Before of continuing, please read the documentation. 
@@ -20,5 +19,10 @@ Read the all documents in doc folder
 ### Run
 ```
 gradle run
+```
+
+### Test
+```
+gradle test
 ```
 

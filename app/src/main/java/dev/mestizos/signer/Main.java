@@ -8,6 +8,10 @@ public class Main {
     public static void main(String[] args) throws RuntimeException {
         System.out.println("QuijoteLui Firmador");
 
+        System.out.println(new Main().SignXmlFile());
+    }
+
+     public String SignXmlFile() {
         ClassLoader classLoader = Main.class.getClassLoader();
 
         var pathDigitalCertificate = classLoader.getResource("Hacker.p12").getPath();
@@ -28,14 +32,14 @@ public class Main {
                     pathXmlFile,
                     pathOutPutFile);
 
-            System.out.println("Document signed saved in " + pathOutPutFile);
+            return "Document signed saved in " + pathOutPutFile;
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return "Document no signed ";
         }
     }
 
-    public static String getNameFileWithOutExtension(String fileName) {
+    String getNameFileWithOutExtension(String fileName) {
         int indexOf = fileName.indexOf(".");
         if (indexOf == -1)
             return fileName;
