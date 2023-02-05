@@ -67,3 +67,19 @@ Example custom identifier
 ```
 openssl req -new -keyout private.key -out cert.csr -subj "/C=US/ST=California/L=San Francisco/O=Example Corp/CN=www.example.com"
 ```
+```
+openssl req -new -key key.pem -out cert.csr -subj "/CN=example.com/O=My Organization/UID=12345678"
+```
+```
+openssl req -new -key key.pem -out cert.csr -config openssl.cnf
+```
+```
+[req]
+distinguished_name = req_distinguished_name
+req_extensions = v3_req
+
+[req_distinguished_name]
+
+[v3_req]
+subjectAltName = email:user@example.com
+```
