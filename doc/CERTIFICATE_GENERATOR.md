@@ -39,3 +39,31 @@ ipsec pki --pub --in "${USER_CERTIFICATE}Key.pem" | ipsec pki --issue --cacert c
 ```
 openssl pkcs12 -in "${USER_CERTIFICATE}Cert.pem" -inkey "${USER_CERTIFICATE}Key.pem" -certfile caCert.pem -export -out "${USER_CERTIFICATE}.p12" -password "pass:${PASSWORD}"
 ```
+
+# Generate certificate with a certificate hierarchy using OpenSSL
+Generate the root CA certificate and private key.
+```
+openssl req -new -x509 -out rootCA.crt -keyout rootCA.key
+```
+Generate the intermediate CA certificate and private key, signed by the root CA
+```
+openssl req -new -keyout intermediateCA.key -out intermediateCA.csr
+```
+```
+openssl x509 -req -in intermediateCA.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out intermediateCA.crt
+```
+Generate the leaf certificate and private key, signed by the intermediate CA.
+```
+openssl req -new -keyout leaf.key -out leaf.csr
+```
+```
+openssl x509 -req -in leaf.csr -CA intermediateCA.crt -CAkey intermediateCA.key -CAcreateserial -out leaf.crt
+```
+Finally, to create the .p12 certificate file, use the following command.
+```
+openssl pkcs12 -export -out certificate.p12 -inkey leaf.key -in leaf.crt -certfile intermediateCA.crt -CAfile rootCA.crt
+```
+Example custom identifier
+```
+openssl req -new -keyout private.key -out cert.csr -subj "/C=US/ST=California/L=San Francisco/O=Example Corp/CN=www.example.com"
+```
