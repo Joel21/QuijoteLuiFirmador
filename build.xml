@@ -75,7 +75,7 @@
             <zipfileset src="${dist.jar}" excludes="META-INF/*"/>
             
             <zipfileset src="lib/bcmail-jdk16-1.45.jar" excludes="META-INF/*"/>
-            <zipfileset src="lib/commons-logging-1.1.1.jar" excludes="META-INF/*"/>            
+            <!-- <zipfileset src="lib/commons-logging-1.1.1.jar" excludes="META-INF/*"/>             -->
             <zipfileset src="lib/MITyCLibAPI-1.1.7.jar" excludes="META-INF/*"/>
             <zipfileset src="lib/MITyCLibCert-1.1.7.jar" excludes="META-INF/*"/>
             <zipfileset src="lib/MITyCLibXADES-1.1.7.jar" excludes="META-INF/*"/>
